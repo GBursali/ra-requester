@@ -17,48 +17,51 @@ public class EndpointBase {
     private RequestSpecification requestSpecification;
     private Path jsonBasePath;
 
-    protected EndpointBase(String baseURL){
+    protected EndpointBase(String baseURL) {
         this.requestSpecification = given().baseUri(baseURL);
     }
-    public static EndpointBase builder(String baseURL){
+
+    public static EndpointBase builder(String baseURL) {
         return new EndpointBase(baseURL);
     }
 
-    public Endpoint makeWithPath(String path){
+    public Endpoint makeWithPath(String path) {
         return Endpoint.fromBase(this).withPath(path);
     }
 
-    public EndpointBase withCookie(Cookie cookie){
+    public EndpointBase withCookie(Cookie cookie) {
         this.requestSpecification = requestSpecification.cookie(cookie);
         return this;
     }
-    public EndpointBase withJsonBasePath(Path jsonBasePath){
+
+    public EndpointBase withJsonBasePath(Path jsonBasePath) {
         this.jsonBasePath = jsonBasePath;
         return this;
     }
 
-    public RequestSpecification getRawRequest(){
+    public RequestSpecification getRawRequest() {
         return this.requestSpecification;
     }
 
     public Endpoint makeWithJson(Path jsonPath) {
-        if(jsonBasePath != null)
+        if (jsonBasePath != null)
             jsonPath = jsonBasePath.resolve(jsonPath);
         File jsonFile = jsonPath.toFile();
-        if(!jsonFile.exists())
-            throw new InvalidJSONException("JSON file not found");
+        if (!jsonFile.exists())
+            throw InvalidJSONException.make("JSON file not found", jsonPath);
         try {
             String contents = Files.readString(jsonPath);
-            return Endpoint.fromJson(this,contents);
+            return Endpoint.fromJson(this, contents);
         } catch (IOException e) {
-            throw new InvalidJSONException("Malformed JSON file supplied");
+            throw InvalidJSONException.make("Malformed JSON file supplied", jsonPath);
         }
     }
+
     public Endpoint makeWithJson(String jsonPath) {
         return makeWithJson(Path.of(jsonPath));
     }
 
-    protected JsonElement jsonify(String content){
+    protected JsonElement jsonify(String content) {
         return JsonParser.parseString(content);
     }
 }
