@@ -2,17 +2,23 @@ package space.gbsdev.endpoint;
 
 import com.google.gson.JsonObject;
 import io.restassured.response.Response;
+import space.gbsdev.utils.InvalidJSONException;
 import space.gbsdev.utils.JSONUtils;
 import space.gbsdev.utils.MethodType;
+import space.gbsdev.utils.json_validator.JSONValidator;
 
+import java.nio.file.Path;
 import java.util.Map;
+import java.util.Objects;
 
 /**
  * This class represents an API endpoint and provides methods to configure and send HTTP requests.
  */
+@SuppressWarnings("java:S1144")
 public class Endpoint {
 
     private MethodType type = MethodType.GET;
+    private JSONValidator jsonValidator;
     private final EndpointBase base;
     private String url;
 
@@ -40,16 +46,32 @@ public class Endpoint {
      * Creates an Endpoint instance from a JSON representation.
      *
      * @param endpointBase The base endpoint configuration.
-     * @param json The JSON representation of the endpoint.
+     * @param object The JSON representation of the endpoint.
      * @return The created Endpoint instance.
      */
-    public static Endpoint fromJson(EndpointBase endpointBase, String json) {
+    public static Endpoint fromJson(EndpointBase endpointBase, JsonObject object) {
         var instance = new Endpoint(endpointBase);
-        JsonObject object = endpointBase.jsonify(json).getAsJsonObject();
         JSONUtils.doIfJsonHasObject(object, "settings", instance::pullSettings);
         JSONUtils.doIfJsonHasObject(object, "params", instance::addParam);
         JSONUtils.doIfJsonHasObject(object, "body", body -> instance.setBody(body.toString()));
         return instance;
+    }
+
+    /**
+     * Sets the JSON schema validator for the response based on the provided schema information.
+     * If the schema includes a file reference, it reads the schema from the file; otherwise, it uses the provided JSON object.
+     *
+     * @param schema The JSON representation of the schema information.
+     *               If the schema includes a "file" attribute, it is treated as a file reference; otherwise, it is used directly.
+     * @throws InvalidJSONException If the file specified in the schema cannot be read or is invalid.
+     */
+    private void setSchema(JsonObject schema){
+        if(schema.has("file")){
+            Path file = Path.of(schema.get("file").getAsString());
+            schema = JSONUtils.readJsonFile(file);
+        }
+        withValidator(JSONUtils.stringify(schema));
+
     }
 
     /**
@@ -125,6 +147,17 @@ public class Endpoint {
     }
 
     /**
+     * Sets the JSON schema validator for the response.
+     *
+     * @param schema The JSON schema as a string.
+     * @return The current Endpoint instance.
+     */
+    public Endpoint withValidator(String schema) {
+        this.jsonValidator = JSONValidator.fromString(schema);
+        return this;
+    }
+
+    /**
      * Sends the configured HTTP request and returns the response.
      *
      * @return The response of the HTTP request.
@@ -133,6 +166,9 @@ public class Endpoint {
         Response result = base.getRawRequest()
                 .request(type.toString(), url)
                 .thenReturn();
+        if(Objects.nonNull(jsonValidator)){
+            jsonValidator.validate(result.asPrettyString());
+        }
 
         return result;
     }

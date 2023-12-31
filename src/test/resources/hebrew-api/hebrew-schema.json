@@ -1,0 +1,75 @@
+{
+  "$ref": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "properties": {
+    "gy": {
+      "type": "integer"
+    },
+    "gm": {
+      "type": "integer"
+    },
+    "gd": {
+      "type": "integer"
+    },
+    "afterSunset": {
+      "type": "boolean"
+    },
+    "hy": {
+      "type": "integer"
+    },
+    "hm": {
+      "type": "string"
+    },
+    "hd": {
+      "type": "integer"
+    },
+    "hebrew": {
+      "type": "string"
+    },
+    "heDateParts": {
+      "type": "object",
+      "properties": {
+        "y": {
+          "type": "string"
+        },
+        "m": {
+          "type": "string"
+        },
+        "d": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "y",
+        "m",
+        "d"
+      ]
+    },
+    "events": {
+      "type": "array",
+      "prefixItems": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "string"
+        },
+        {
+          "type": "string"
+        }
+      ]
+    }
+  },
+  "required": [
+    "gy",
+    "gm",
+    "gd",
+    "afterSunset",
+    "hy",
+    "hm",
+    "hd",
+    "hebrew",
+    "heDateParts",
+    "events"
+  ]
+}

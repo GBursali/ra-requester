@@ -23,11 +23,7 @@ public class APITest {
                 .makeWithJson("hebrew-api/hebrew_converter.json")
                 .send()
                 .then()
-                .assertThat().statusCode(200)
-                .assertThat().contentType(ContentType.JSON)
-                .body("$", Matchers.hasKey("afterSunset"))
-                .body("$", Matchers.hasKey("heDateParts"))
-                .body("$", Matchers.hasKey("events"));
+                .assertThat().statusCode(200);
     }
 
     /**
@@ -37,7 +33,6 @@ public class APITest {
     @Test
     public void verifyEmojiHubAPIWithoutParameters() {
         EndpointBase.builder("https://emojihub.yurace.pro")
-                .withJsonBasePath(resourcePath)
                 .makeWithPath("/api/random")
                 .send()
                 .then()

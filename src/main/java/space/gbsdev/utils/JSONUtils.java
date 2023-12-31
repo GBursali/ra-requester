@@ -2,6 +2,9 @@ package space.gbsdev.utils;
 
 import com.google.gson.*;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.Map;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
@@ -9,18 +12,28 @@ import java.util.stream.Collectors;
 /**
  * Utility class for working with JSON data using the Gson library.
  */
+@SuppressWarnings("java:S1144")
 public class JSONUtils {
 
-    public static final String ERROR_INVALID_JSON = "Provided content is not a valid JSON";
+    /**
+     * Gson instance used for JSON serialization and deserialization.
+     */
+    private static Gson gson = new Gson();
 
-    // Prevent instantiation of the utility class
-    protected JSONUtils() {
+    /**
+     * Prevent instantiation of the utility class.
+     */
+    private JSONUtils() {
     }
 
+    /**
+     * Sets a custom Gson instance to be used for JSON serialization and deserialization.
+     *
+     * @param customGson The custom Gson instance.
+     */
     public static void setGsonInstance(Gson customGson) {
         gson = customGson;
     }
-    private static Gson gson = new Gson();
 
     /**
      * Performs the specified action if the given JSON object has the specified key.
@@ -68,7 +81,7 @@ public class JSONUtils {
             return JsonParser.parseString(content);
         }
         catch (JsonParseException e){
-            throw new InvalidJSONException(ERROR_INVALID_JSON);
+            throw new InvalidJSONException("Provided content is not a valid JSON");
         }
     }
 
@@ -97,4 +110,32 @@ public class JSONUtils {
                         x -> x.getValue().getAsString()
                 ));
     }
+
+    /**
+     * Reads the content of a JSON file located at the specified path and returns it as a JsonObject.
+     *
+     * @param filePath The path to the JSON file.
+     * @return The JsonObject representing the content of the JSON file.
+     * @throws InvalidJSONException If the file is not found or contains invalid JSON content.
+     */
+    public static JsonObject readJsonFile(Path filePath) {
+        return readJsonFile(filePath, "File not found or contains invalid JSON content");
+    }
+
+    /**
+     * Reads the content of a JSON file located at the specified path and returns it as a JsonObject.
+     *
+     * @param filePath     The path to the JSON file.
+     * @param errorMessage The error message to use if the file is not found or contains invalid JSON content.
+     * @return The JsonObject representing the content of the JSON file.
+     * @throws InvalidJSONException If the file is not found or contains invalid JSON content.
+     */
+    public static JsonObject readJsonFile(Path filePath, String errorMessage) {
+        try {
+            return jsonify(Files.readString(filePath)).getAsJsonObject();
+        } catch (IOException e) {
+            throw new InvalidJSONException(errorMessage, filePath);
+        }
+    }
+
 }

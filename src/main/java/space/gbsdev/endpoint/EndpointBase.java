@@ -1,14 +1,14 @@
 package space.gbsdev.endpoint;
 
 import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import io.restassured.http.Cookie;
 import io.restassured.specification.RequestSpecification;
 import space.gbsdev.utils.InvalidJSONException;
+import space.gbsdev.utils.JSONUtils;
 
 import java.io.File;
-import java.io.IOException;
-import java.nio.file.Files;
 import java.nio.file.Path;
 
 import static io.restassured.RestAssured.given;
@@ -17,6 +17,7 @@ import static io.restassured.RestAssured.given;
  * Base class for building REST API endpoints. It provides methods for configuring the base URL,
  * creating endpoints with specific paths and JSON data, and handling request specifications.
  */
+@SuppressWarnings("java:S1144")
 public class EndpointBase {
 
     private RequestSpecification requestSpecification;
@@ -92,15 +93,14 @@ public class EndpointBase {
     public Endpoint makeWithJson(Path jsonPath) {
         if (jsonBasePath != null)
             jsonPath = jsonBasePath.resolve(jsonPath);
+
         File jsonFile = jsonPath.toFile();
         if (!jsonFile.exists())
-            throw InvalidJSONException.make("JSON file not found", jsonPath);
-        try {
-            String contents = Files.readString(jsonPath);
-            return Endpoint.fromJson(this, contents);
-        } catch (IOException e) {
-            throw InvalidJSONException.make("Malformed JSON file supplied", jsonPath);
-        }
+            throw new InvalidJSONException("JSON file not found", jsonPath);
+
+
+        JsonObject contents = JSONUtils.readJsonFile(jsonPath,"Malformed JSON file supplied");
+        return Endpoint.fromJson(this, contents);
     }
 
     /**
