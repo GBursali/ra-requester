@@ -1,33 +1,42 @@
 import io.restassured.http.ContentType;
-import io.restassured.response.Response;
 import org.hamcrest.Matchers;
 import org.junit.Test;
 import space.gbsdev.endpoint.EndpointBase;
 
 import java.nio.file.Path;
 
+/**
+ * Test class for API endpoint validations.
+ */
 public class APITest {
 
-    public Path resourcePath = Path.of("src","test","resources");
+    private final Path resourcePath = Path.of("src", "test", "resources");
+
+    /**
+     * Verifies the behavior of the Hebrew conversion API.
+     * This test checks specific properties in the response after making a request to the Hebrew conversion API.
+     */
     @Test
-    public void checkHebrew(){
-        var base = EndpointBase
-                .builder("https://www.hebcal.com")
-                .withJsonBasePath(resourcePath);
-        //save above variable, and use anytime like:
-        var endpoint= base.makeWithJson("hebrew_converter.json");
-        Response response = endpoint.send();
-        response.then()
+    public void verifyHebrewConversionAPI() {
+        EndpointBase.builder("https://www.hebcal.com")
+                .withJsonBasePath(resourcePath)
+                .makeWithJson("hebrew-api/hebrew_converter.json")
+                .send()
+                .then()
                 .assertThat().statusCode(200)
                 .assertThat().contentType(ContentType.JSON)
                 .body("$", Matchers.hasKey("afterSunset"))
                 .body("$", Matchers.hasKey("heDateParts"))
                 .body("$", Matchers.hasKey("events"));
     }
+
+    /**
+     * Verifies the behavior of the Emoji Hub API without providing specific parameters.
+     * This test checks various properties in the response after making a request to the Emoji Hub API without parameters.
+     */
     @Test
-    public void checkWithoutParameters(){
-        EndpointBase
-                .builder("https://emojihub.yurace.pro")
+    public void verifyEmojiHubAPIWithoutParameters() {
+        EndpointBase.builder("https://emojihub.yurace.pro")
                 .withJsonBasePath(resourcePath)
                 .makeWithPath("/api/random")
                 .send()
