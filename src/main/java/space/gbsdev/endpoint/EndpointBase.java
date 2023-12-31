@@ -113,14 +113,4 @@ public class EndpointBase {
     public Endpoint makeWithJson(String jsonPath) {
         return makeWithJson(Path.of(jsonPath));
     }
-
-    /**
-     * Parses the given content and returns a JsonElement.
-     *
-     * @param content The JSON content to parse.
-     * @return The parsed JsonElement.
-     */
-    protected JsonElement jsonify(String content) {
-        return JsonParser.parseString(content);
-    }
 }
