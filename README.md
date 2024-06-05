@@ -1,6 +1,6 @@
 # RestAssured Requester
 
-A wrapper framework for RestAssured that simplifies the management, creation, and editing of DTOs.
+A wrapper framework for RestAssured that simplifies the management, creation, and editing of DTOs. and much much more
 ## Table of Contents
 
 - [Introduction](#introduction)
