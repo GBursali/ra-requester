@@ -2,12 +2,14 @@ package com.gbursali.endpoint;
 
 import com.google.gson.JsonObject;
 import io.restassured.http.Cookie;
+import io.restassured.http.Header;
 import io.restassured.specification.RequestSpecification;
 import com.gbursali.utils.InvalidJSONException;
 import com.gbursali.utils.JSONUtils;
 
 import java.io.File;
 import java.nio.file.Path;
+import java.util.List;
 
 import static io.restassured.RestAssured.given;
 
@@ -18,6 +20,7 @@ import static io.restassured.RestAssured.given;
 @SuppressWarnings("java:S1144")
 public class EndpointBase {
 
+    private List<Header> headers;
     private RequestSpecification requestSpecification;
     private Path jsonBasePath;
 
@@ -58,6 +61,17 @@ public class EndpointBase {
      */
     public EndpointBase withCookie(Cookie cookie) {
         this.requestSpecification = requestSpecification.cookie(cookie);
+        return this;
+    }
+
+    /**
+     * Adds a header to the request specification.
+     *
+     * @param header The header to add.
+     * @return The updated EndpointBase instance.
+     */
+    public EndpointBase withHeader(Header header) {
+        this.requestSpecification = requestSpecification.header(header);
         return this;
     }
 
