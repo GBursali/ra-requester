@@ -80,7 +80,7 @@ public class Endpoint {
      * @param body The body of the endpoint.
      * @return The current Endpoint instance.
      */
-    private Endpoint setBody(String body) {
+    public Endpoint setBody(String body) {
         this.base.getRawRequest().body(body);
         return this;
     }
