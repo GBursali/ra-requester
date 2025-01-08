@@ -5,7 +5,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>com.gbursali</groupId>
-    <artifactId>ra-requestor</artifactId>
+    <artifactId>ra-requester</artifactId>
     <version>1.0</version>
 
     <properties>
@@ -18,7 +18,7 @@
         <repository>
             <id>github</id>
             <name>GitHub OWNER Apache Maven Packages</name>
-            <url>https://maven.pkg.github.com/GBursali/ra-requestor</url>
+            <url>https://maven.pkg.github.com/GBursali/ra-requester</url>
         </repository>
     </distributionManagement>
 
