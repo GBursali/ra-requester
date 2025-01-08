@@ -1,4 +1,4 @@
-package space.gbsdev.utils.json_validator;
+package com.gbursali.utils.json_validator;
 
 import dev.harrel.jsonschema.Error;
 

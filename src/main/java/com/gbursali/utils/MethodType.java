@@ -1,4 +1,4 @@
-package space.gbsdev.utils;
+package com.gbursali.utils;
 /**
  * Enumeration representing common HTTP methods.
  * Each constant corresponds to a specific HTTP method used in RESTful API communication.

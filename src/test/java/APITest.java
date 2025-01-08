@@ -1,7 +1,7 @@
 import io.restassured.http.ContentType;
 import org.hamcrest.Matchers;
 import org.junit.Test;
-import space.gbsdev.endpoint.EndpointBase;
+import com.gbursali.endpoint.EndpointBase;
 
 import java.nio.file.Path;
 

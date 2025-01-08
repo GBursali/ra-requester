@@ -1,11 +1,11 @@
-package space.gbsdev.endpoint;
+package com.gbursali.endpoint;
 
 import com.google.gson.JsonObject;
 import io.restassured.response.Response;
-import space.gbsdev.utils.InvalidJSONException;
-import space.gbsdev.utils.JSONUtils;
-import space.gbsdev.utils.MethodType;
-import space.gbsdev.utils.json_validator.JSONValidator;
+import com.gbursali.utils.InvalidJSONException;
+import com.gbursali.utils.JSONUtils;
+import com.gbursali.utils.MethodType;
+import com.gbursali.utils.json_validator.JSONValidator;
 
 import java.nio.file.Path;
 import java.util.Map;

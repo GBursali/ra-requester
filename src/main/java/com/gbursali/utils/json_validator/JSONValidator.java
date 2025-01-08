@@ -1,4 +1,4 @@
-package space.gbsdev.utils.json_validator;
+package com.gbursali.utils.json_validator;
 
 import com.google.gson.JsonObject;
 import dev.harrel.jsonschema.Dialects;
@@ -6,7 +6,7 @@ import dev.harrel.jsonschema.Error;
 import dev.harrel.jsonschema.Validator;
 import dev.harrel.jsonschema.ValidatorFactory;
 import dev.harrel.jsonschema.providers.GsonNode;
-import space.gbsdev.utils.JSONUtils;
+import com.gbursali.utils.JSONUtils;
 
 import java.nio.file.Path;
 import java.util.logging.Logger;

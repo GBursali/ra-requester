@@ -1,12 +1,10 @@
-package space.gbsdev.endpoint;
+package com.gbursali.endpoint;
 
-import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
 import io.restassured.http.Cookie;
 import io.restassured.specification.RequestSpecification;
-import space.gbsdev.utils.InvalidJSONException;
-import space.gbsdev.utils.JSONUtils;
+import com.gbursali.utils.InvalidJSONException;
+import com.gbursali.utils.JSONUtils;
 
 import java.io.File;
 import java.nio.file.Path;

@@ -1,4 +1,4 @@
-package space.gbsdev.utils;
+package com.gbursali.utils;
 
 import com.google.gson.*;
 
